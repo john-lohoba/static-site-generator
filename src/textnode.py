@@ -26,4 +26,4 @@ class TextNode:
         return False
 
     def __repr__(self):
-        return f"TextNode({self.text}, {self.tex_type}, {self.url})"
+        return f"TextNode({self.text}, {self.tex_type.value}, {self.url})"
