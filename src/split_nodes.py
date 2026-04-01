@@ -10,7 +10,6 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
 
         split_nodes = []
         sections = node.text.split(delimiter)
-        print(sections)
 
         if len(sections) % 2 == 0:
             raise Exception("Invalid Markdown syntax")
