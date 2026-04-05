@@ -9,7 +9,7 @@ class TextHTMLNode(unittest.TestCase):
             "h1",
             "This is a heading",
         )
-        repr = "tag=h1, value=This is a heading, children=None, props=None"
+        repr = "HTMLNode tag=h1, value=This is a heading, children=None, props=None"
         self.assertEqual(node.__repr__(), repr)
 
     def test_props_to_html(self):

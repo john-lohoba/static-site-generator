@@ -11,44 +11,38 @@ class BlockType(Enum):
 
 
 def markdown_to_blocks(markdown):
-    split_blocks = markdown.split("\n\n")
-    new_list = []
-    for block in split_blocks:
+    blocks = markdown.split("\n\n")
+    filtered_blocks = []
+    for block in blocks:
+        if block.strip() == "":
+            continue
         block = block.strip()
-        if block != "":
-            new_list.append(block)
-    return new_list
+        filtered_blocks.append(block)
+    return filtered_blocks
 
 
-def block_to_block_type(markdown_text_block):
-    split_block = markdown_text_block.split("\n")
+def block_to_block_type(block):
+    lines = [line.strip() for line in block.split("\n")]
 
-    if markdown_text_block.startswith(
-        ("# ", "## ", "### ", "#### ", "##### ", "###### ")
-    ):
+    if block.startswith(("# ", "## ", "### ", "#### ", "##### ", "###### ")):
         return BlockType.HEADING
-
-    if len(split_block) > 1 and split_block[0] == "```" and split_block[-1] == "```":
+    if len(lines) > 1 and lines[0].startswith("```") and lines[-1].startswith("```"):
         return BlockType.CODE
-
-    quote = True
-    unordered_list = True
-    ordered_list = True
-    n = 1
-    for line in split_block:
-        if not line.startswith(">"):
-            quote = False
-        if not line.startswith("- "):
-            unordered_list = False
-        if not line.startswith(f"{n}. "):
-            # print(f"{n}.")
-            ordered_list = False
-        n += 1
-
-    if quote is True:
+    if block.startswith(">"):
+        for line in lines:
+            if not line.startswith(">"):
+                return BlockType.PARAGRAPH
         return BlockType.QUOTE
-    if unordered_list is True:
+    if block.startswith("- "):
+        for line in lines:
+            if not line.startswith("- "):
+                return BlockType.PARAGRAPH
         return BlockType.UNORDERED_LIST
-    if ordered_list is True:
+    if block.startswith("1. "):
+        i = 1
+        for line in lines:
+            if not line.startswith(f"{i}. "):
+                return BlockType.PARAGRAPH
+            i += 1
         return BlockType.ORDERED_LIST
     return BlockType.PARAGRAPH
