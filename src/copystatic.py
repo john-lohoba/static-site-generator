@@ -39,10 +39,25 @@ def generate_page(from_path, template_path, dest_path):
 
     dest_dir_path = os.path.dirname(dest_path)
     os.makedirs(dest_dir_path, exist_ok=True)
-    # print("Rewriting index.html...")
     file = open(dest_path, "w")
     file.write(copy_template)
     file.close()
-    # print("Template edited.")
 
+    return
+
+
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    if not os.path.exists(dir_path_content):
+        raise Exception(f"Invalid content path: {dir_path_content}")
+
+    for filename in os.listdir(dir_path_content):
+        current_path = os.path.join(dir_path_content, filename)
+        if not os.path.isfile(current_path):
+            next_path = os.path.join(dir_path_content, filename)
+            dest_dir_path_next = os.path.join(dest_dir_path, filename)
+            generate_pages_recursive(next_path, template_path, dest_dir_path_next)
+        else:
+            filename_to_html = filename.split(".")[0] + ".html"
+            dest_path = os.path.join(dest_dir_path, filename_to_html)
+            generate_page(current_path, template_path, dest_path)
     return
