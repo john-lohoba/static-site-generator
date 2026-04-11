@@ -1,19 +1,22 @@
 import os
 import shutil
+import sys
 
-from copystatic import copy_files_recursive, generate_page, generate_pages_recursive
+from copystatic import copy_files_recursive, generate_pages_recursive
 
 
 dir_path_static = "./static"
-dir_path_public = "./public"
-
-from_path = "./content/index.md"
-template_path = "./template.html"
-dest_path = "./public/index.html"
+dir_path_public = "./docs"
 
 dir_path_content = "./content"
 template_path = "./template.html"
-dest_dir_path = "./public"
+dest_dir_path = "./docs"
+
+
+if len(sys.argv) == 1:
+    basepath = "/"
+else:
+    basepath = sys.argv[1]
 
 
 def main():
@@ -24,7 +27,7 @@ def main():
     print("Copying static files to public directory...")
     copy_files_recursive(dir_path_static, dir_path_public)
 
-    generate_pages_recursive(dir_path_content, template_path, dest_dir_path)
+    generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath)
 
 
 main()
